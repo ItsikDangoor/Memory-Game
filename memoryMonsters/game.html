@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>My App</title>
+  <link rel="stylesheet" href="css/game.css" />
+</head>
+
+<body>
+  <div class="header">
+    <img src="img/layout/logo.png">
+    <h1>Memory Monsters</h1>
+    <h4>By <a href="index.html">Itsik Dangoor</a> (Coding Academy Challenge)</h4>
+    <p><label id="playerName"></label> Best time: <label class="bestTime"></label></p>
+    <div class="buttons">
+      <button id="playAgainButton" type="button" onclick="resetAllCards()">Play Again</button>
+      <br>
+      <button type="button" onclick="changeUser()">Change User</button>
+    </div>
+  </div>
+
+  <div class="board">
+    <!-- data-card i an attribute the user add -->
+    <div class="card" data-card="1" onclick="cardClicked(this)"><!-- this is the element which was clicked on, ALL the div -->
+      <img src="img/cards/1.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="7" onclick="cardClicked(this)">
+      <img src="img/cards/7.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="1" onclick="cardClicked(this)">
+      <img src="img/cards/1.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="7" onclick="cardClicked(this)">
+      <img src="img/cards/7.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="5" onclick="cardClicked(this)">
+      <img src="img/cards/5.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="5" onclick="cardClicked(this)">
+      <img src="img/cards/5.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="2" onclick="cardClicked(this)">
+      <img src="img/cards/2.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="4" onclick="cardClicked(this)">
+      <img src="img/cards/4.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="8" onclick="cardClicked(this)">
+      <img src="img/cards/8.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="2" onclick="cardClicked(this)">
+      <img src="img/cards/2.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="8" onclick="cardClicked(this)">
+      <img src="img/cards/8.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="4" onclick="cardClicked(this)">
+      <img src="img/cards/4.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="3" onclick="cardClicked(this)">
+      <img src="img/cards/3.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="6" onclick="cardClicked(this)">
+      <img src="img/cards/6.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="3" onclick="cardClicked(this)">
+      <img src="img/cards/3.png">
+      <img class="back" src="img/cards/back.png">
+    </div>
+    <div class="card" data-card="6" onclick="cardClicked(this)">
+      <img src="img/cards/6.png">
+      <img class="back" src="img/cards/back.png">
+    </div>  
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+</html>

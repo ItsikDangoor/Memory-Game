@@ -1,0 +1,101 @@
+header {
+	margin: auto;
+	text-align: center;
+}
+
+div {
+	padding: 0px 20px;
+	margin: auto;
+	margin-bottom: 50px;
+}
+
+article {
+	padding: 0px 20px;
+	border-left: 7px solid red;
+	margin-bottom: 50px;
+}
+
+table {
+	border: 2px solid green;
+}
+
+td {
+	border: .5px solid green;
+	height: 30px;
+}
+
+a:link {
+	color:#0000ff;
+	text-decoration: none;
+}
+
+a:visited {
+	color:#0000ff;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+button {
+	font-size: 1.5em;
+	color: white;
+	background-color: black;
+	border-radius: .75em;
+	width: 100%;
+	height: 50px;
+	border-color: red;
+	-webkit-transition: background-color 1s ease-out;
+  	-moz-transition: background-color 1s ease-out;
+  	-o-transition: background-color 1s ease-out;
+  	transition: background-color 1s ease-out;
+}
+
+button:hover {
+	background-color: white;
+	color: black;
+	cursor: pointer;
+}
+
+button:focus {
+	outline: none;
+}
+
+#buttonPlay {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#profileContainer {
+	border: 0.125em solid #6A5ACD;
+	border-radius: 10%;
+	width: 50%;
+	margin: auto;
+	background-color: #8B4513;
+}
+
+#profile {
+	width: 100%;
+	border-radius: 10%;
+	border-color: yellow;
+}
+
+.authors {
+	font-size: .8em;
+	font-style: italic;;
+}
+
+.signs {
+	font-weight: bold;
+	font-size: 1.5em;
+}
+
+
+
+.box {
+	width: 80%;
+	height: 150px;
+	background: red;
+	margin-top: 20px;
+}
