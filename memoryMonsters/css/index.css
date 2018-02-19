@@ -15,6 +15,20 @@ article {
 	margin-bottom: 50px;
 }
 
+#profileContainer {
+	border: 0.125em solid #6A5ACD;
+	border-radius: 10%;
+	width: 50%;
+	margin: auto;
+	background-color: #8B4513;
+}
+
+#profile {
+	width: 100%;
+	border-radius: 10%;
+	border-color: yellow;
+}
+
 table {
 	border: 2px solid green;
 }
@@ -36,6 +50,21 @@ a:visited {
 
 a:hover {
 	text-decoration: underline;
+}
+
+.authors {
+	font-size: .8em;
+	font-style: italic;;
+}
+
+.signs {
+	font-weight: bold;
+	font-size: 1.5em;
+}
+
+#buttonPlay {
+	margin-left: auto;
+	margin-right: auto;
 }
 
 button {
@@ -61,37 +90,6 @@ button:hover {
 button:focus {
 	outline: none;
 }
-
-#buttonPlay {
-	margin-left: auto;
-	margin-right: auto;
-}
-
-#profileContainer {
-	border: 0.125em solid #6A5ACD;
-	border-radius: 10%;
-	width: 50%;
-	margin: auto;
-	background-color: #8B4513;
-}
-
-#profile {
-	width: 100%;
-	border-radius: 10%;
-	border-color: yellow;
-}
-
-.authors {
-	font-size: .8em;
-	font-style: italic;;
-}
-
-.signs {
-	font-weight: bold;
-	font-size: 1.5em;
-}
-
-
 
 .box {
 	width: 80%;

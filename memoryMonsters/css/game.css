@@ -1,7 +1,3 @@
-#playAgainButton {
-    display: none;
-}
-
 .header {
     background-color: lightblue;
     padding: 20px;
@@ -29,5 +25,9 @@
 }
 
 .flipped .back {
+    display: none;
+}
+
+#playAgainButton {
     display: none;
 }
