@@ -9,6 +9,7 @@ var endGameTime = 0;
 var totalGameTime = 0;
 var gamerName = "";
 var isProcessing = false;
+let currentTime = 0;
 
 
 /* Indexs
@@ -44,9 +45,10 @@ function leadingZero(time) {
 // Run a standard minute/second timer.
 // Hundredths section future addtion.
 function runTimer() {
-    let currentTime = leadingZero(timer[0]) + ":" + leadingZero(timer[1]);// + ":" + leadingZero(timer[2]);
+    currentTime = leadingZero(timer[0]) + ":" + leadingZero(timer[1]);// + ":" + leadingZero(timer[2]);
     theTimer.innerHTML = currentTime;
     timer[3] += 1;
+    //log('timer[3]: ' + timer[3]);
 
     // Doing the time calculation for display, Math.floor --> no decimals
     // (timer[3] / 100)       --> gives seconds
@@ -59,6 +61,7 @@ function runTimer() {
        And subtracting timer zero times 6,000. For every time the minutes reach 100
        so it will not start counting upwards from there.*/
     timer[2] = Math.floor(timer[3] - (timer[1] * 100) - (timer[0] * 6000));
+    log(timer[0] * 60 + timer[1]);
 }
 
 function startTimer() {
@@ -103,7 +106,7 @@ function stopTime() {
 function checkIfGameFirstClick() {
     if(!gameFirstClicked) {
         gameFirstClicked = true;
-        startGameTime = Date.now();
+        /*startGameTime = Date.now();*/
     }
 }
 
@@ -114,6 +117,11 @@ function updateUserBestTime() {
     } else if (totalGameTime < localStorage.getItem("bestTime_" + gamerName)) {
         localStorage.setItem("bestTime_" + gamerName, totalGameTime);
         document.querySelector(".bestTime").innerHTML = totalGameTime;
+
+        log('localStorage: ' + localStorage.getItem("bestTime_" + gamerName));
+        log('Total Game time: ' + totalGameTime);
+        log('the Timer: ' + theTimer.innerHTML);
+        log('timer array: ' + (timer[0] * 60 + timer[1]));
     }
 }
 
@@ -198,7 +206,7 @@ window.onload = function() {
     gamerName = prompt("Enter your name:");
     registerGamer(gamerName);
     prepareEventHandlers();
-}
+};
 
 
 
@@ -246,9 +254,10 @@ function clickingTheCard(elCard) {
 
             // All cards flipped!
             if (TOTAL_COUPLES_COUNT === flippedCouplesCount) {
-                endGameTime = Date.now();
-                totalGameTime = Math.floor((endGameTime - startGameTime)/1000);
+                /*endGameTime = Date.now();
+                totalGameTime = Math.floor((endGameTime - startGameTime)/1000);*/
                 clearInterval(interval);
+                totalGameTime = timer[0] * 60 + timer[1];
                 updateUserBestTime();//in local storage
                 toggleVisibility("resetOrPlayAgain");
                 audioWin.play();
