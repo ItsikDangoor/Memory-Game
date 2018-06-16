@@ -7,6 +7,7 @@ Updates:
 - setting timer as record variable, not using duplicated time controller
 - adding and changing design.
 - removing index.html and style.css from the project
+- best time format display mm:ss
 
 Updates in Version 2:
 - Added stopwatch, mm:ss
