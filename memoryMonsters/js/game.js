@@ -1,15 +1,17 @@
-var log = console.log;
+let log = console.log;
 
 // Global variables, reflect the state of the game
-var elPreviousCard = null;
-var flippedCouplesCount = 0;
-var gameFirstClicked = false;
-var startGameTime = 0;
-var endGameTime = 0;
-var totalGameTime = 0;
-var gamerName = "";
-var isProcessing = false;
+let elPreviousCard = null;
+let flippedCouplesCount = 0;
+let gameFirstClicked = false;
+let startGameTime = 0;
+let endGameTime = 0;
+let totalGameTime = 0;
+let gamerName = "";
+let isProcessing = false;
 let currentTime = 0;
+let setTimeoutID = 0;
+let bestTimeDispaly = [0, 0];
 
 
 /* Indexs
@@ -17,9 +19,9 @@ let currentTime = 0;
     1 - second
     2 - hundredth of a second
     3 - thousandths of a second */
-var timer = [0, 0, 0, 0];
-var interval;
-var timerRunning = false;// When the script originally loads, the timer is not running.
+let timer = [0, 0, 0, 0];
+let interval;
+let timerRunning = false;// When the script originally loads, the timer is not running.
 
 
 // Constants
@@ -28,9 +30,20 @@ const theTimer = document.querySelector(".timer");
 
 
 // Load an audio file
-var audioWin = new Audio('sound/win.mp3');
-var audioRight = new Audio("sound/right.mp3");
-var audioWrong = new Audio("sound/wrong.mp3");
+const audioWin = new Audio('sound/win.mp3');
+const audioRight = new Audio("sound/right.mp3");
+const audioWrong = new Audio("sound/wrong.mp3");
+
+const board = document.querySelector('.board');
+const allCards = document.querySelectorAll('.card');
+
+const resetOrPlayAgain = document.getElementById('resetOrPlayAgain');
+const changeTheUser = document.getElementById('changeUser');
+const giveUp = document.getElementById('giveUp');
+
+// todo:
+// why this way it's not working??
+//const divs = document.querySelectorAll('.flipped');
 
 
 //==========================================================Timer Code==============================================
@@ -62,6 +75,7 @@ function runTimer() {
        so it will not start counting upwards from there.*/
     timer[2] = Math.floor(timer[3] - (timer[1] * 100) - (timer[0] * 6000));
     log(timer[0] * 60 + timer[1]);
+    //log('theTimer.innerHTML: ' + theTimer.innerHTML);
 }
 
 function startTimer() {
@@ -118,15 +132,16 @@ function updateUserBestTime() {
         localStorage.setItem("bestTime_" + gamerName, totalGameTime);
         document.querySelector(".bestTime").innerHTML = totalGameTime;
 
-        log('localStorage: ' + localStorage.getItem("bestTime_" + gamerName));
-        log('Total Game time: ' + totalGameTime);
-        log('the Timer: ' + theTimer.innerHTML);
-        log('timer array: ' + (timer[0] * 60 + timer[1]));
     }
+
+    log('localStorage: ' + localStorage.getItem("bestTime_" + gamerName));
+    log('Total Game time: ' + totalGameTime);
+    log('the Timer: ' + theTimer.innerHTML);
+    log('timer array: ' + (timer[0] * 60 + timer[1]));
 }
 
 function toggleVisibility(id) {
-       var e = document.getElementById(id);
+       let e = document.getElementById(id);
        if(e.style.display === 'inline-block')
           e.style.display = 'none';
        else
@@ -134,21 +149,27 @@ function toggleVisibility(id) {
 }
 
 function shuffleCards() {
-    var board = document.querySelector('.board');
-    for (var i = board.children.length; i >= 0; i--) {
+    //var board = document.querySelector('.board');
+    for (let i = board.children.length; i >= 0; i--) {
         board.appendChild(board.children[Math.random() * i | 0]);
     }
 } 
 
 // Flipping to back card side, and randomly arranging all the cards, and reset time
 function resetAllCards() {
-    var divs = document.querySelectorAll('.flipped');
+    let divs = document.querySelectorAll('.flipped');
     for(let i = 0; i < divs.length; i += 1) {
+        log("inside resetAllCards for");
         divs[i].classList.remove('flipped');
     }
     gameFirstClicked = false;
     flippedCouplesCount = 0; 
-    document.querySelector('#resetOrPlayAgain').style.display = 'none';
+    /*document.querySelector('#resetOrPlayAgain').style.display = 'none';*/
+    if(setTimeoutID > 0) {
+        window.clearTimeout(setTimeoutID);
+        setTimeoutID = 0;
+        isProcessing = false;
+    }
     shuffleCards();
     resetTime();
 }
@@ -159,7 +180,24 @@ function registerGamer(gamerName) {
     if(localStorage.getItem("gamerName_" + gamerName) === null) {
         localStorage.setItem('gamerName_' + gamerName, gamerName);
     } else {
-        document.querySelector(".bestTime").innerHTML = localStorage.getItem("bestTime_" + gamerName);
+        //converting string to number
+        let bestTime = +localStorage.getItem("bestTime_" + gamerName);
+        log(bestTime);
+        log(typeof bestTime);
+        if(bestTime > 59) {
+            log('inside if');
+            bestTimeDispaly[0] =  Math.floor(bestTime / 60);
+            log(bestTimeDispaly[0]);
+            //bestTimeDispaly[1] = Math.floor((bestTime / 60) - (bestTimeDispaly[0] * 60));
+            bestTimeDispaly[1] = bestTime % 60;
+            log(bestTimeDispaly[1]);
+            bestTime = leadingZero(bestTimeDispaly[0]) + ":" + leadingZero(bestTimeDispaly[1]);
+        } else {
+            bestTime = `00:${leadingZero(bestTime)}`;
+        }
+        //document.querySelector(".bestTime").innerHTML = localStorage.getItem("bestTime_" + gamerName);
+        document.querySelector(".bestTime").innerHTML = bestTime;
+        //bestTimeDispaly = [0, 0];
     }
     document.querySelector("#playerName").innerHTML = gamerName;
 }
@@ -171,22 +209,26 @@ function changeUser() {
 }
 
 function flipAllCards() {
-    var allCards = document.querySelectorAll('.card');
-    for(let i = 0; i < allCards.length; i += 1)
-    {
+    /*var allCards = document.querySelectorAll('.card');*/
+    if(setTimeoutID > 0) {
+        window.clearTimeout(setTimeoutID);
+        setTimeoutID = 0;
+        isProcessing = false;
+    }
+    for(let i = 0; i < allCards.length; i += 1) {
         allCards[i].classList.add('flipped');    
     }
     stopTime();
+    setTimeoutID = setTimeout(resetAllCards, 5000);
 }
 
 function prepareEventHandlers() {
-    var allCards = document.querySelectorAll('.card');
+    /*var allCards = document.querySelectorAll('.card');
     var resetOrPlayAgain = document.getElementById('resetOrPlayAgain');
     var changeTheUser = document.getElementById('changeUser');
-    var giveUp = document.getElementById('giveUp');
+    var giveUp = document.getElementById('giveUp');*/
 
-    for(let i = 0; i < allCards.length; i += 1)
-    {
+    for(let i = 0; i < allCards.length; i += 1) {
         // The line below is like using a pipe sending the event to the event funtion hander, but no need for this app.
         // Also have to change the clickingTHe card signature as well - function clickingTheCard(event, elCard)
         // allCards[i].addEventListener("click", function(event) { clickingTheCard(event, this); }, false);
@@ -206,6 +248,7 @@ window.onload = function() {
     gamerName = prompt("Enter your name:");
     registerGamer(gamerName);
     prepareEventHandlers();
+    shuffleCards();
 };
 
 
@@ -234,12 +277,12 @@ function clickingTheCard(elCard) {
     } else {
         isProcessing = true;
         // get the data-card attribute's value from both cards
-        var card1 = elPreviousCard.getAttribute('data-card');
-        var card2 = elCard.getAttribute('data-card');
+        let card1 = elPreviousCard.getAttribute('data-card');
+        let card2 = elCard.getAttribute('data-card');
 
         // No match, schedule to flip them back in 1 second
         if (card1 !== card2){
-            setTimeout(function () {
+            setTimeoutID = setTimeout(function () {
                 audioWrong.play();
                 elCard.classList.remove('flipped');
                 elPreviousCard.classList.remove('flipped');
@@ -258,8 +301,10 @@ function clickingTheCard(elCard) {
                 totalGameTime = Math.floor((endGameTime - startGameTime)/1000);*/
                 clearInterval(interval);
                 totalGameTime = timer[0] * 60 + timer[1];
+                log('MAIN: totalGameTime: ' + totalGameTime);
+                log('MAIN: theTimer.innerHTML: ' + theTimer.innerHTML);
                 updateUserBestTime();//in local storage
-                toggleVisibility("resetOrPlayAgain");
+                /*toggleVisibility("resetOrPlayAgain");*/
                 audioWin.play();
             } else {
                 audioRight.play();
