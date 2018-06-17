@@ -156,8 +156,7 @@ function shuffleCards() {
 // Flipping to back card side, and randomly arranging all the cards, and reset time
 function resetAllCards() {
     let divs = document.querySelectorAll('.flipped');
-    for(let i = 0; i < divs.length; i += 1) {
-        log("inside resetAllCards for");
+    for(let i = 0; i < divs.length; i += 1) 
         divs[i].classList.remove('flipped');
     }
     gameFirstClicked = false;
