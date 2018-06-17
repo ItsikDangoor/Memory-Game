@@ -74,7 +74,6 @@ function runTimer() {
        And subtracting timer zero times 6,000. For every time the minutes reach 100
        so it will not start counting upwards from there.*/
     timer[2] = Math.floor(timer[3] - (timer[1] * 100) - (timer[0] * 6000));
-    log(timer[0] * 60 + timer[1]);
 }
 
 function startTimer() {
