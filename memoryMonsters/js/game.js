@@ -42,8 +42,10 @@ const changeTheUser = document.getElementById('changeUser');
 const giveUp = document.getElementById('giveUp');
 
 // todo:
-// why this way it's not working??
-//const divs = document.querySelectorAll('.flipped');
+//1. why this way it's not working??
+//   const divs = document.querySelectorAll('.flipped');
+//2. injectCardsToHTML in window.load calling it before prepareEventListeners, the
+//   event handlers won't work! why?
 
 
 //==========================================================Timer Code==============================================
@@ -117,6 +119,20 @@ function stopTime() {
 
 //===================================================== Game functions =============================================
 //==================================================================================================================
+function injectCardsToHTML() {
+    let html = "";
+    for(let i = 1; i <= TOTAL_COUPLES_COUNT; i += 1) {
+        for(let j = 0; j < 2; j += 1) {
+            html += `<div class="card" data-card="${i}">
+                        <img src="img/cards/${i}.png">
+                        <img class="back" src="img/cards/back.png">
+                    </div>
+`;
+        }
+    }
+    return html;
+}
+
 function checkIfGameFirstClick() {
     if(!gameFirstClicked) {
         gameFirstClicked = true;
@@ -124,20 +140,39 @@ function checkIfGameFirstClick() {
     }
 }
 
+function formatBestTime(bestTime) {
+    if(bestTime > 59) {
+        log('inside if');
+        bestTimeDispaly[0] =  Math.floor(bestTime / 60);
+        log(bestTimeDispaly[0]);
+        bestTimeDispaly[1] = bestTime % 60;
+        log(bestTimeDispaly[1]);
+        bestTime = `${leadingZero(bestTimeDispaly[0])}:${leadingZero(bestTimeDispaly[1])}`;
+        bestTimeDispaly = [0, 0];
+    } else {
+        bestTime = `00:${leadingZero(bestTime)}`;
+    }
+
+    return bestTime;
+}
+
 function updateUserBestTime() {
     if (localStorage.getItem("bestTime_" + gamerName) === null) {
         localStorage.setItem("bestTime_" + gamerName, totalGameTime);
-        document.querySelector(".bestTime").innerHTML = totalGameTime;
+        //document.querySelector(".bestTime").innerHTML = totalGameTime;
+        document.querySelector(".bestTime").innerHTML = formatBestTime(totalGameTime);
     } else if (totalGameTime < localStorage.getItem("bestTime_" + gamerName)) {
         localStorage.setItem("bestTime_" + gamerName, totalGameTime);
-        document.querySelector(".bestTime").innerHTML = totalGameTime;
-
+        //document.querySelector(".bestTime").innerHTML = totalGameTime;
+        document.querySelector(".bestTime").innerHTML = formatBestTime(totalGameTime);
     }
 
+    log('---- UpdateUserBestTIme ----');
     log('localStorage: ' + localStorage.getItem("bestTime_" + gamerName));
     log('Total Game time: ' + totalGameTime);
     log('the Timer: ' + theTimer.innerHTML);
     log('timer array: ' + (timer[0] * 60 + timer[1]));
+    log('----------------------------');
 }
 
 function toggleVisibility(id) {
@@ -150,7 +185,7 @@ function toggleVisibility(id) {
 
 function shuffleCards() {
     //var board = document.querySelector('.board');
-    for (let i = board.children.length; i >= 0; i--) {
+    for (let i = board.children.length; i >= 0; i -= 1) {
         board.appendChild(board.children[Math.random() * i | 0]);
     }
 } 
@@ -182,7 +217,8 @@ function registerGamer(gamerName) {
     } else {
         //converting string to number
         let bestTime = +localStorage.getItem("bestTime_" + gamerName);
-        log(bestTime);
+        document.querySelector(".bestTime").innerHTML = formatBestTime(bestTime);
+        /*log(bestTime);
         log(typeof bestTime);
         if(bestTime > 59) {
             log('inside if');
@@ -192,18 +228,31 @@ function registerGamer(gamerName) {
             bestTimeDispaly[1] = bestTime % 60;
             log(bestTimeDispaly[1]);
             bestTime = leadingZero(bestTimeDispaly[0]) + ":" + leadingZero(bestTimeDispaly[1]);
+            bestTime = `${leadingZero(bestTimeDispaly[0])}:${leadingZero(bestTimeDispaly[1])}`;
         } else {
             bestTime = `00:${leadingZero(bestTime)}`;
         }
         //document.querySelector(".bestTime").innerHTML = localStorage.getItem("bestTime_" + gamerName);
         document.querySelector(".bestTime").innerHTML = bestTime;
-        //bestTimeDispaly = [0, 0];
+        //bestTimeDispaly = [0, 0];*/
     }
     document.querySelector("#playerName").innerHTML = gamerName;
 }
 
+function promptGamerName() {
+    gamerName = window.prompt("Enter you Name: ");
+    if(gamerName === '' || gamerName === null) {
+        gamerName = "Anonymous";
+    }
+    return gamerName;
+}
+
 function changeUser() {
-    gamerName = prompt("Enter you Name: ");
+    /*gamerName = prompt("Enter you Name: ");
+    if(gamerName === '' || gamerName === null) {
+        gamerName = "Anonymous";
+    }*/
+    gamerName = promptGamerName();
     registerGamer(gamerName);
     resetAllCards();
 }
@@ -245,8 +294,11 @@ function prepareEventHandlers() {
 
 // After loading all page assets, preparing the game 
 window.onload = function() {
-    gamerName = prompt("Enter your name:");
+    //gamerName = prompt("Enter your name:");
+    gamerName = promptGamerName();
     registerGamer(gamerName);
+    //log(injectCardsToHTML());
+    //board.innerHTML = injectCardsToHTML();
     prepareEventHandlers();
     shuffleCards();
 };
