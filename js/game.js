@@ -176,6 +176,7 @@ function resetAllCards() {
 function registerGamer(gamerName) {
     if(localStorage.getItem("gamerName_" + gamerName) === null) {
         localStorage.setItem('gamerName_' + gamerName, gamerName);
+        document.querySelector(".bestTime").innerHTML = "--:--";
     } else {
         //converting string to number
         let bestTime = +localStorage.getItem("bestTime_" + gamerName);
