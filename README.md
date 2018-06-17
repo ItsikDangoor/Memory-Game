@@ -1,6 +1,8 @@
 # Memory-Game
 JS memory Game
 
+https://itsikdangoor.github.io/Memory-Game/
+
 (purpose of the project, implementing and learning web technologies)
 
 Updates:
