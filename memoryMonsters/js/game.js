@@ -4,17 +4,15 @@ let log = console.log;
 let elPreviousCard = null;
 let flippedCouplesCount = 0;
 let gameFirstClicked = false;
-let startGameTime = 0;
-let endGameTime = 0;
 let totalGameTime = 0;
 let gamerName = "";
 let isProcessing = false;
 let currentTime = 0;
 let setTimeoutID = 0;
-let bestTimeDispaly = [0, 0];
+let bestTimeDisplay = [0, 0];
 
 
-/* Indexs
+/* Indexes
     0 - minute
     1 - second
     2 - hundredth of a second
@@ -46,6 +44,7 @@ const giveUp = document.getElementById('giveUp');
 //   const divs = document.querySelectorAll('.flipped');
 //2. injectCardsToHTML in window.load calling it before prepareEventListeners, the
 //   event handlers won't work! why?
+//3. maybe add Hundredths section future addition.
 
 
 //==========================================================Timer Code==============================================
@@ -58,7 +57,6 @@ function leadingZero(time) {
 }
 
 // Run a standard minute/second timer.
-// Hundredths section future addtion.
 function runTimer() {
     currentTime = leadingZero(timer[0]) + ":" + leadingZero(timer[1]);// + ":" + leadingZero(timer[2]);
     theTimer.innerHTML = currentTime;
@@ -77,32 +75,16 @@ function runTimer() {
        so it will not start counting upwards from there.*/
     timer[2] = Math.floor(timer[3] - (timer[1] * 100) - (timer[0] * 6000));
     log(timer[0] * 60 + timer[1]);
-    //log('theTimer.innerHTML: ' + theTimer.innerHTML);
 }
 
 function startTimer() {
     if(!timerRunning) {
         timerRunning = true;
-        /*The problem is, need to do stop the interval from outside the start function and can not do it
-          because theres no way of referring to the interval to begin with,so if trying to stop it,
-          will bring to stop some other interval that's running and nothing will work.
-          But the solution is simple!
-          Global variable called interval, put set interval inside that variable, this variable 
-          now effectively is the set interval function. That means, if will use a clear interval 
-          function on interval, what in fact will be using it on set interval and clearing this interval.*/
-        /*setInterval(runTimer, 10);*/ //runs every thousands of a second//the older version
         interval = setInterval(runTimer, 10);
     }
 }
 
 function resetTime() {
-    /* First, reset the interval timer that runs in the background. That's that setInterval timer that sits inside the interval variable,
-       so will just clearInterval,interval. This just ensures the browser's not running in interval in the background after starting 
-       a new one because that would just waste a lot of resources.
-
-       Next grab the interval variable and set it to null.
-       doing this so that when reassigning set interval the next time starting the app it is not setting up a new interval with 
-       a new index number because then again it be running multiple processes in the browser simultaneously and waste a lot of resources. */
     clearInterval(interval);
     interval = null;
     timer = [0, 0, 0, 0];
@@ -119,7 +101,7 @@ function stopTime() {
 
 //===================================================== Game functions =============================================
 //==================================================================================================================
-function injectCardsToHTML() {
+/*function injectCardsToHTML() {
     let html = "";
     for(let i = 1; i <= TOTAL_COUPLES_COUNT; i += 1) {
         for(let j = 0; j < 2; j += 1) {
@@ -131,24 +113,23 @@ function injectCardsToHTML() {
         }
     }
     return html;
-}
+}*/
 
 function checkIfGameFirstClick() {
     if(!gameFirstClicked) {
         gameFirstClicked = true;
-        /*startGameTime = Date.now();*/
     }
 }
 
 function formatBestTime(bestTime) {
     if(bestTime > 59) {
         log('inside if');
-        bestTimeDispaly[0] =  Math.floor(bestTime / 60);
-        log(bestTimeDispaly[0]);
-        bestTimeDispaly[1] = bestTime % 60;
-        log(bestTimeDispaly[1]);
-        bestTime = `${leadingZero(bestTimeDispaly[0])}:${leadingZero(bestTimeDispaly[1])}`;
-        bestTimeDispaly = [0, 0];
+        bestTimeDisplay[0] =  Math.floor(bestTime / 60);
+        log(bestTimeDisplay[0]);
+        bestTimeDisplay[1] = bestTime % 60;
+        log(bestTimeDisplay[1]);
+        bestTime = `${leadingZero(bestTimeDisplay[0])}:${leadingZero(bestTimeDisplay[1])}`;
+        bestTimeDisplay = [0, 0];
     } else {
         bestTime = `00:${leadingZero(bestTime)}`;
     }
@@ -159,28 +140,11 @@ function formatBestTime(bestTime) {
 function updateUserBestTime() {
     if (localStorage.getItem("bestTime_" + gamerName) === null) {
         localStorage.setItem("bestTime_" + gamerName, totalGameTime);
-        //document.querySelector(".bestTime").innerHTML = totalGameTime;
         document.querySelector(".bestTime").innerHTML = formatBestTime(totalGameTime);
     } else if (totalGameTime < localStorage.getItem("bestTime_" + gamerName)) {
         localStorage.setItem("bestTime_" + gamerName, totalGameTime);
-        //document.querySelector(".bestTime").innerHTML = totalGameTime;
         document.querySelector(".bestTime").innerHTML = formatBestTime(totalGameTime);
     }
-
-    log('---- UpdateUserBestTIme ----');
-    log('localStorage: ' + localStorage.getItem("bestTime_" + gamerName));
-    log('Total Game time: ' + totalGameTime);
-    log('the Timer: ' + theTimer.innerHTML);
-    log('timer array: ' + (timer[0] * 60 + timer[1]));
-    log('----------------------------');
-}
-
-function toggleVisibility(id) {
-       let e = document.getElementById(id);
-       if(e.style.display === 'inline-block')
-          e.style.display = 'none';
-       else
-          e.style.display = 'inline-block';
 }
 
 function shuffleCards() {
@@ -198,8 +162,7 @@ function resetAllCards() {
         divs[i].classList.remove('flipped');
     }
     gameFirstClicked = false;
-    flippedCouplesCount = 0; 
-    /*document.querySelector('#resetOrPlayAgain').style.display = 'none';*/
+    flippedCouplesCount = 0;
     if(setTimeoutID > 0) {
         window.clearTimeout(setTimeoutID);
         setTimeoutID = 0;
@@ -218,23 +181,6 @@ function registerGamer(gamerName) {
         //converting string to number
         let bestTime = +localStorage.getItem("bestTime_" + gamerName);
         document.querySelector(".bestTime").innerHTML = formatBestTime(bestTime);
-        /*log(bestTime);
-        log(typeof bestTime);
-        if(bestTime > 59) {
-            log('inside if');
-            bestTimeDispaly[0] =  Math.floor(bestTime / 60);
-            log(bestTimeDispaly[0]);
-            //bestTimeDispaly[1] = Math.floor((bestTime / 60) - (bestTimeDispaly[0] * 60));
-            bestTimeDispaly[1] = bestTime % 60;
-            log(bestTimeDispaly[1]);
-            bestTime = leadingZero(bestTimeDispaly[0]) + ":" + leadingZero(bestTimeDispaly[1]);
-            bestTime = `${leadingZero(bestTimeDispaly[0])}:${leadingZero(bestTimeDispaly[1])}`;
-        } else {
-            bestTime = `00:${leadingZero(bestTime)}`;
-        }
-        //document.querySelector(".bestTime").innerHTML = localStorage.getItem("bestTime_" + gamerName);
-        document.querySelector(".bestTime").innerHTML = bestTime;
-        //bestTimeDispaly = [0, 0];*/
     }
     document.querySelector("#playerName").innerHTML = gamerName;
 }
@@ -248,17 +194,12 @@ function promptGamerName() {
 }
 
 function changeUser() {
-    /*gamerName = prompt("Enter you Name: ");
-    if(gamerName === '' || gamerName === null) {
-        gamerName = "Anonymous";
-    }*/
     gamerName = promptGamerName();
     registerGamer(gamerName);
     resetAllCards();
 }
 
 function flipAllCards() {
-    /*var allCards = document.querySelectorAll('.card');*/
     if(setTimeoutID > 0) {
         window.clearTimeout(setTimeoutID);
         setTimeoutID = 0;
@@ -272,14 +213,9 @@ function flipAllCards() {
 }
 
 function prepareEventHandlers() {
-    /*var allCards = document.querySelectorAll('.card');
-    var resetOrPlayAgain = document.getElementById('resetOrPlayAgain');
-    var changeTheUser = document.getElementById('changeUser');
-    var giveUp = document.getElementById('giveUp');*/
-
     for(let i = 0; i < allCards.length; i += 1) {
         // The line below is like using a pipe sending the event to the event funtion hander, but no need for this app.
-        // Also have to change the clickingTHe card signature as well - function clickingTheCard(event, elCard)
+        // Also have to change the clickingThe card signature as well - function clickingTheCard(event, elCard)
         // allCards[i].addEventListener("click", function(event) { clickingTheCard(event, this); }, false);
         allCards[i].addEventListener("click", function() { clickingTheCard(this); }, false);
         allCards[i].addEventListener("click", startTimer, false);
@@ -288,13 +224,12 @@ function prepareEventHandlers() {
     resetOrPlayAgain.addEventListener("click", resetAllCards, false);
     giveUp.addEventListener("click", flipAllCards, false);
     // Be aware for naming the function as the same name of object caller ---> cause a collision
-    // the event handler is not registed to the button!
+    // the event handler is not registered to the button!
     changeTheUser.addEventListener("click", changeUser, false);
 }
 
 // After loading all page assets, preparing the game 
 window.onload = function() {
-    //gamerName = prompt("Enter your name:");
     gamerName = promptGamerName();
     registerGamer(gamerName);
     //log(injectCardsToHTML());
@@ -349,14 +284,9 @@ function clickingTheCard(elCard) {
 
             // All cards flipped!
             if (TOTAL_COUPLES_COUNT === flippedCouplesCount) {
-                /*endGameTime = Date.now();
-                totalGameTime = Math.floor((endGameTime - startGameTime)/1000);*/
                 clearInterval(interval);
                 totalGameTime = timer[0] * 60 + timer[1];
-                log('MAIN: totalGameTime: ' + totalGameTime);
-                log('MAIN: theTimer.innerHTML: ' + theTimer.innerHTML);
                 updateUserBestTime();//in local storage
-                /*toggleVisibility("resetOrPlayAgain");*/
                 audioWin.play();
             } else {
                 audioRight.play();
