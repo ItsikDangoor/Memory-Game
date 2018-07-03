@@ -15,9 +15,7 @@ body {
 .header {
     /*background-color: lightblue;*/
     padding: 20px;
-    /*border-bottom: 10px solid darkcyan;*/
     border-bottom: 10px solid #de90d1;
-    /*color: darkcyan;*/
     color: #dadaf7;
     font-size: 1.5em;
     text-align: center;
@@ -27,12 +25,12 @@ body {
     float:right;
 }*/
 
-.buttons button {
-
+.board {
+    width: 75%;
+    margin: auto;
 }
 
 .card {
-    /*background-color: pink;*/
     background-color: rgba(255, 255, 255, .2);
     height: 165px;
     width: 165px;
@@ -52,8 +50,6 @@ body {
 /*#playAgainButton {
     display: none;
 }*/
-
-/*<a href="#" class="myButton">purple</a>*/
 
 .buttons button{
     -moz-box-shadow:inset 0px 0px 28px 0px #efdcfb;
@@ -83,6 +79,7 @@ body {
     margin: 5px;
     outline: none;
 }
+
 .buttons button:hover {
     background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #bc80ea), color-stop(1, #dfbdfa));
     background:-moz-linear-gradient(top, #bc80ea 5%, #dfbdfa 100%);
@@ -93,6 +90,7 @@ body {
     /*filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#bc80ea', endColorstr='#dfbdfa',GradientType=0);*/
     background-color: #bc80ea;
 }
+
 .buttons button:active {
     position:relative;
     top:1px;
