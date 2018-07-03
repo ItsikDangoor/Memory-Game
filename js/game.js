@@ -39,12 +39,6 @@ const resetOrPlayAgain = document.getElementById('resetOrPlayAgain');
 const changeTheUser = document.getElementById('changeUser');
 const giveUp = document.getElementById('giveUp');
 
-// todo:
-//1. why this way it's not working??
-//   const divs = document.querySelectorAll('.flipped');
-//2. injectCardsToHTML in window.load calling it before prepareEventListeners, the
-//   event handlers won't work! why?
-//3. maybe add Hundredths section future addition.
 
 
 //==========================================================Timer Code==============================================
@@ -97,6 +91,8 @@ function stopTime() {
     timer = [0, 0, 0, 0];
     timerRunning = false;
 }
+
+
 
 //===================================================== Game functions =============================================
 //==================================================================================================================
