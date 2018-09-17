@@ -21,3 +21,6 @@ window.onload = function() {
     prepareEventHandlers();
     shuffleCards();
 };
+
+//To Do:
+//initialize all variables after 'give up' action(Flipping cards)
