@@ -96,20 +96,6 @@ function stopTime() {
 
 //===================================================== Game functions =============================================
 //==================================================================================================================
-/*function injectCardsToHTML() {
-    let html = "";
-    for(let i = 1; i <= TOTAL_COUPLES_COUNT; i += 1) {
-        for(let j = 0; j < 2; j += 1) {
-            html += `<div class="card" data-card="${i}">
-                        <img src="img/cards/${i}.png">
-                        <img class="back" src="img/cards/back.png">
-                    </div>
-`;
-        }
-    }
-    return html;
-}*/
-
 function checkIfGameFirstClick() {
     if(!gameFirstClicked) {
         gameFirstClicked = true;
@@ -118,11 +104,8 @@ function checkIfGameFirstClick() {
 
 function formatBestTime(bestTime) {
     if(bestTime > 59) {
-        log('inside if');
         bestTimeDisplay[0] =  Math.floor(bestTime / 60);
-        log(bestTimeDisplay[0]);
         bestTimeDisplay[1] = bestTime % 60;
-        log(bestTimeDisplay[1]);
         bestTime = `${leadingZero(bestTimeDisplay[0])}:${leadingZero(bestTimeDisplay[1])}`;
         bestTimeDisplay = [0, 0];
     } else {
@@ -143,7 +126,6 @@ function updateUserBestTime() {
 }
 
 function shuffleCards() {
-    //var board = document.querySelector('.board');
     for (let i = board.children.length; i >= 0; i -= 1) {
         board.appendChild(board.children[Math.random() * i | 0]);
     }
@@ -227,8 +209,6 @@ function prepareEventHandlers() {
 window.onload = function() {
     gamerName = promptGamerName();
     registerGamer(gamerName);
-    //log(injectCardsToHTML());
-    //board.innerHTML = injectCardsToHTML();
     prepareEventHandlers();
     shuffleCards();
 };
